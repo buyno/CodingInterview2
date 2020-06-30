@@ -104,5 +104,5 @@ int main()
     B = new TreeNode(1);
     B->left = new TreeNode(-4);
     s.isSubStructure(A, B);
-    // assert(s.isSubStructure(A, B) == false);
+    assert(s.isSubStructure(A, B) == false);
 }

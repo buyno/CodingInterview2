@@ -8,43 +8,55 @@
 // 下一个遍历的是最右节点的父节点，加它加到tail中，其他节点同理
 // 返回到root节点时，将root加到tail上，再依次遍历右子树
 
-#include "../Tree.h"
+#include "../utils/Tree.h"
 #include <stdio.h>
 #include "assert.h"
-void buildLinkedList(TreeNode *root,TreeNode **tail){
-    if(root == nullptr){
-        return ;
-    }else{
-        buildLinkedList(root->left,tail);
-        if(*tail == nullptr){
+void buildLinkedList(TreeNode *root, TreeNode **tail)
+{
+    if (root == nullptr)
+    {
+        return;
+    }
+    else
+    {
+        buildLinkedList(root->left, tail);
+        if (*tail == nullptr)
+        {
             *tail = root;
-        }else{
+        }
+        else
+        {
             (*tail)->right = root;
             root->left = *tail;
             *tail = root;
         }
-        buildLinkedList(root->right,tail);
-
+        buildLinkedList(root->right, tail);
     }
 }
-TreeNode *buildLinkedList(TreeNode *root){
-    if(root==nullptr){
+TreeNode *buildLinkedList(TreeNode *root)
+{
+    if (root == nullptr)
+    {
         return nullptr;
     }
-    TreeNode *tail=nullptr;
-    buildLinkedList(root->left,&tail);
+    TreeNode *tail = nullptr;
+    buildLinkedList(root->left, &tail);
 
-    if(tail){
+    if (tail)
+    {
         tail->right = root;
         root->left = tail;
         tail = root;
-    }else{
+    }
+    else
+    {
         tail = root;
     }
 
-    buildLinkedList(root->right,&tail);
+    buildLinkedList(root->right, &tail);
     TreeNode *head;
-    while(tail->left){
+    while (tail->left)
+    {
         tail = tail->left;
     }
     head = tail;
@@ -52,13 +64,15 @@ TreeNode *buildLinkedList(TreeNode *root){
     return head;
 }
 
-void test1(){
+void test1()
+{
     TreeNode *root = nullptr;
 
     TreeNode *head = buildLinkedList(root);
     assert(head == nullptr);
 }
-void test2(){
+void test2()
+{
     TreeNode *root = new TreeNode(10);
     root->left = new TreeNode(6);
     root->right = new TreeNode(14);
@@ -69,7 +83,8 @@ void test2(){
     TreeNode *head = buildLinkedList(root);
     assert(head->value == 4);
 }
-void test3(){
+void test3()
+{
     TreeNode *root = new TreeNode(10);
     root->left = new TreeNode(6);
     root->left->left = new TreeNode(4);
@@ -80,7 +95,8 @@ void test3(){
     assert(head->right->right->value == 10);
     assert(head->right->right->right == nullptr);
 }
-void test4(){
+void test4()
+{
     TreeNode *root = new TreeNode(10);
     root->right = new TreeNode(14);
     root->right->right = new TreeNode(16);
@@ -91,14 +107,16 @@ void test4(){
     assert(head->right->right->value == 16);
     assert(head->right->right->right == nullptr);
 }
-void test5(){
+void test5()
+{
     TreeNode *root = new TreeNode(10);
     TreeNode *head = buildLinkedList(root);
     assert(head->value == 10);
     assert(head->left == nullptr);
     assert(head->right == nullptr);
 }
-int main(){
+int main()
+{
 
     test1();
     test2();

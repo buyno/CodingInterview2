@@ -2,6 +2,8 @@
 
 #include <assert.h>
 #include <stdio.h>
+#include <iostream>
+using namespace std;
 // double power(int base, int component)
 // {
 //     if (base == 0)
@@ -27,6 +29,14 @@
 // }
 double power(int x, int n)
 {
+    if (x == 0)
+    {
+        return 0;
+    }
+    if (n == 0)
+    {
+        return 1;
+    }
     int negative = 0;
     if (n < 0)
     {
@@ -43,6 +53,10 @@ double power(int x, int n)
     for (int i = 0; i < n - index; i++)
     {
         tmp *= x;
+    }
+    if (negative == 1)
+    {
+        return 1 / tmp;
     }
     return tmp;
 }

@@ -71,12 +71,12 @@ void print(int n)
     while (addone(nums))
     {
         vec.push_back(atoi(nums));
-        // printNumber(nums);
+        printNumber(nums);
     }
 }
 
 int main()
 {
     print(-2);
-    print(7);
+    print(6);
 }

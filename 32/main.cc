@@ -4,7 +4,7 @@
 
 #include <stdio.h>
 #include <queue>
-#include "../Tree.h"
+#include "../utils/Tree.h"
 using namespace std;
 
 void printTree(TreeNode *root)

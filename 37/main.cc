@@ -6,7 +6,7 @@
 //读数时要考虑数是-1
 
 //参考test.cc(负数，性能)
-#include "../Tree.h"
+#include "../utils/Tree.h"
 #include <stdio.h>
 #include <string>
 #include <string.h>

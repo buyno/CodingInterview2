@@ -1,18 +1,22 @@
 //二叉树的中序遍历时，某个节点的下一个节点
 
-#include "../Tree.h"
+#include "../utils/Tree.h"
 #include "stdio.h"
 #include <assert.h>
-TreeNode *getLeftestChildNode(TreeNode *node){
+TreeNode *getLeftestChildNode(TreeNode *node)
+{
     TreeNode *res = node;
-    while(res->left){
+    while (res->left)
+    {
         res = res->left;
     }
     return res;
 }
 
-TreeNode *getNext(TreeNode *node){
-    if(!node)return nullptr;
+TreeNode *getNext(TreeNode *node)
+{
+    if (!node)
+        return nullptr;
     // 如果有右子树，那么下一个是右子树中最左边的节点
     // 如果没有右子树，并且是左子节点，下一个就是他的父节点
     // 如果没有右子树，并且不是左子节点，那就向父节点查找，直到找到某个父节点是其父节点的左子节点时，这个父节就是下一个
@@ -21,12 +25,18 @@ TreeNode *getNext(TreeNode *node){
     {
         TreeNode *temp = getLeftestChildNode(node->right);
         return temp;
-    }else if(node->parent && node->parent->left == node){
+    }
+    else if (node->parent && node->parent->left == node)
+    {
         return node->parent;
-    }else{
+    }
+    else
+    {
         TreeNode *p = node->parent;
-        while(p){
-            if(p->parent && p->parent->left == p){
+        while (p)
+        {
+            if (p->parent && p->parent->left == p)
+            {
                 return p->parent;
             }
             p = p->parent;
@@ -37,8 +47,9 @@ TreeNode *getNext(TreeNode *node){
     // return head->left->right->left;
 }
 // 普通二叉树
-void test1(){
-TreeNode *head = new TreeNode();
+void test1()
+{
+    TreeNode *head = new TreeNode();
     TreeNode *a = head;
     TreeNode *b = new TreeNode();
     TreeNode *c = new TreeNode();
@@ -83,7 +94,8 @@ TreeNode *head = new TreeNode();
     assert(res == a);
 }
 // 满二叉树
-void test2(){
+void test2()
+{
     TreeNode *head = new TreeNode();
     TreeNode *a = head;
     TreeNode *b = new TreeNode();
@@ -118,7 +130,8 @@ void test2(){
     assert(res == nullptr);
 }
 //完全二叉树
-void test3(){
+void test3()
+{
     TreeNode *head = new TreeNode();
     TreeNode *a = head;
     TreeNode *b = new TreeNode();
@@ -149,7 +162,8 @@ void test3(){
     assert(res == c);
 }
 // 没有右子树的二叉树
-void test4(){
+void test4()
+{
     TreeNode *head = new TreeNode();
     TreeNode *a = head;
     TreeNode *b = new TreeNode();
@@ -173,7 +187,8 @@ void test4(){
     assert(res == c);
 }
 // 没有左子树的二叉树
-void test5(){
+void test5()
+{
     TreeNode *head = new TreeNode();
     TreeNode *a = head;
     TreeNode *b = new TreeNode();
@@ -197,20 +212,23 @@ void test5(){
     assert(res == nullptr);
 }
 // 只有一个节点
-void test6(){
+void test6()
+{
     TreeNode *head = new TreeNode();
     TreeNode *res = getNext(head);
 
     assert(res == nullptr);
 }
 // 指针为空
-void test7(){
+void test7()
+{
     TreeNode *head = nullptr;
     TreeNode *res = getNext(head);
 
     assert(res == nullptr);
 }
-int main(){
+int main()
+{
     test1();
     test2();
     test3();

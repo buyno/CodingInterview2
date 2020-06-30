@@ -5,28 +5,36 @@
 // X解决：前序遍历序列和前序遍历镜像序列相同X
 #include <stdio.h>
 #include <assert.h>
-#include "../Tree.h"
+#include "../utils/Tree.h"
 // return 1 是镜像； 0不是镜像树
-int isTreeMirror(TreeNode *root1,TreeNode *root2){
-    if(root1 == nullptr && root2 == nullptr){
+int isTreeMirror(TreeNode *root1, TreeNode *root2)
+{
+    if (root1 == nullptr && root2 == nullptr)
+    {
         return 1;
     }
-    if(root1 == nullptr || root2 == nullptr){
+    if (root1 == nullptr || root2 == nullptr)
+    {
         return 0;
     }
 
-    if(root1->value != root2->value){
+    if (root1->value != root2->value)
+    {
         return 0;
-    }else{
-        return isTreeMirror(root1->left,root2->right) && isTreeMirror(root1->right,root2->left);
+    }
+    else
+    {
+        return isTreeMirror(root1->left, root2->right) && isTreeMirror(root1->right, root2->left);
     }
 }
-int isTreeMirror(TreeNode *root){
-    return isTreeMirror(root,root);
-    
-    // return 0;   
+int isTreeMirror(TreeNode *root)
+{
+    return isTreeMirror(root, root);
+
+    // return 0;
 }
-void Test1(){
+void Test1()
+{
     TreeNode *root = new TreeNode(8);
     root->left = new TreeNode(6);
     root->right = new TreeNode(6);
@@ -37,12 +45,14 @@ void Test1(){
     int res = isTreeMirror(root);
     assert(res == 1);
 }
-void Test2(){
+void Test2()
+{
     TreeNode *root = nullptr;
     int res = isTreeMirror(root);
     assert(res == 1);
 }
-void Test3(){
+void Test3()
+{
     TreeNode *root = new TreeNode(8);
     root->left = new TreeNode(6);
     root->right = new TreeNode(6);
@@ -53,7 +63,8 @@ void Test3(){
     int res = isTreeMirror(root);
     assert(res == 0);
 }
-void Test4(){
+void Test4()
+{
     TreeNode *root = new TreeNode(8);
     root->left = new TreeNode(6);
     root->right = new TreeNode(6);
@@ -63,13 +74,15 @@ void Test4(){
     int res = isTreeMirror(root);
     assert(res == 0);
 }
-void Test5(){
+void Test5()
+{
     TreeNode *root = new TreeNode(8);
 
     int res = isTreeMirror(root);
     assert(res == 1);
 }
-int main(){
+int main()
+{
     Test1();
     Test2();
     Test3();

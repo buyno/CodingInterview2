@@ -1,7 +1,7 @@
 // 输出二叉树的镜像
 // 返回一颗新树，新树是原树的镜像
 
-#include "../Tree.h"
+#include "../utils/Tree.h"
 #include <stdio.h>
 
 TreeNode *getMirrorTree(TreeNode *root)
