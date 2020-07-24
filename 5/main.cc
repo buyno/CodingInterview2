@@ -1,76 +1,68 @@
 // 替换空格为%20
-#include <stdio.h>
-#include <assert.h>
-#include <string.h>
-void replace(char *str,int length){
-    if(str == nullptr)return;
-    int spacecount = 0;
-    int reallength = 0;
-    for(int i=0;i<length;i++){
-        
-        if(str[i] == '\0')break;
-        reallength++;
-        if(str[i] == ' ')spacecount++;
-    }
 
-    int length2 = reallength + spacecount*2;
-    assert(length2 < length);
-    int p1 = reallength - 1;
-    int p2 = length2 - 1;
-    for(;p1 >= 0;p1--){
-        if(str[p1] != ' '){
-            str[p2] = str[p1];
-            p2--;
-        }else{
-            str[p2] = '0';
-            str[p2-1] = '2';
-            str[p2-2] = '%';
-            p2 -= 3;
+// 请实现一个函数，把字符串 s 中的每个空格替换成"%20"。
+// 输入：s = "We are happy."
+// 输出："We%20are%20happy."
+#include <iostream>
+#include <assert.h>
+#include <string>
+using namespace std;
+class Solution
+{
+public:
+    string replaceSpace(string s)
+    {
+        int originlength = s.length();
+        int spacecount = 0;
+        for (int i = 0; i < originlength; i++)
+        {
+            if (s[i] == ' ')
+            {
+                spacecount++;
+            }
         }
+        //不要新创建字符串，直接连接效率更高
+        s += string(spacecount * 2, ' ');
+        int index = s.length() - 1;
+        for (int i = originlength - 1; i >= 0; i--)
+        {
+            if (s[i] != ' ')
+            {
+                s[index--] = s[i];
+                // continue;
+            }
+            else
+            {
+                s[index--] = '0';
+                s[index--] = '2';
+                s[index--] = '%';
+            }
+        }
+        return s;
     }
-    return ;
-}
-void test1(){
-    char str[100] = "we a a";
-    replace(str,sizeof(str)/sizeof(str[0]));
-    assert(strcmp(str,"we%20a%20a") == 0);
-}
-void test2(){
-    char str[100] = " we a a";
-    replace(str,sizeof(str)/sizeof(str[0]));
-    assert(strcmp(str,"%20we%20a%20a") == 0);
-}
-void test3(){
-    char str[100] = "we a a ";
-    replace(str,sizeof(str)/sizeof(str[0]));
-    assert(strcmp(str,"we%20a%20a%20") == 0);
-}
-void test4(){
-    char str[100] = "weaa";
-    replace(str,sizeof(str)/sizeof(str[0]));
-    assert(strcmp(str,"weaa") == 0);
-}
-void test5(){
-    char str[100] = "";
-    replace(str,sizeof(str)/sizeof(str[0]));
-    assert(strcmp(str,"") == 0);
-}
-void test6(){
-    char str[100] = " ";
-    replace(str,sizeof(str)/sizeof(str[0]));
-    assert(strcmp(str,"%20") == 0);
-}
-void test7(){
-    char str[100] = "we  aaa a";
-    replace(str,sizeof(str)/sizeof(str[0]));
-    assert(strcmp(str,"we%20%20aaa%20a") == 0);
-}
-int main(){
-    test1();
-    test2();
-    test3();
-    test4();
-    test5();
-    test6();
-    test7();
+};
+
+int main()
+{
+    {
+        Solution s;
+        string str;
+        string res = s.replaceSpace(str);
+        cout << res << endl;
+        assert(res == "");
+    }
+    {
+        Solution s;
+        string str = "  ";
+        string res = s.replaceSpace(str);
+        cout << res << endl;
+        assert(res == "%20%20");
+    }
+    {
+        Solution s;
+        string str = "we are ill";
+        string res = s.replaceSpace(str);
+        cout << res << endl;
+        assert(res == "we%20are%20ill");
+    }
 }

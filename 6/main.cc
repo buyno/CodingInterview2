@@ -1,81 +1,48 @@
 // 从尾到头打印链表
+// 输入一个链表的头节点，从尾到头反过来返回每个节点的值（用数组返回）
+// 输入：head = [1,3,2]
+// 输出：[2,3,1]
 
-#include <stdio.h>
-struct ListNode{
-    int value;
-    ListNode *pNext;
+// 直接用栈保存中间值，效率反而更高
+#include <iostream>
+#include <vector>
+#include <stack>
+using namespace std;
+
+struct ListNode
+{
+    int val;
+    ListNode *next;
+    ListNode(int x) : val(x), next(NULL) {}
 };
 
-void addToTail(ListNode **head,int value){
-    ListNode *pNode = new ListNode();
-    pNode->value = value;
-    if(*head){
-        ListNode *tail = *head;
-        while(tail->pNext){
-            tail = tail->pNext;
+class Solution
+{
+public:
+    vector<int> reversePrint(ListNode *head)
+    {
+        stack<int> ss;
+        auto iter = head;
+        while (iter)
+        {
+            ss.push(iter->val);
+            iter = iter->next;
         }
-        tail->pNext = pNode;
-    }else{
-        *head = pNode;
+        vector<int> res;
+        while (!ss.empty())
+        {
+            res.push_back(ss.top());
+            ss.pop();
+        }
+        return res;
     }
-}
-void printListNode(ListNode *head){
-    ListNode *node = head;
-    while(node->pNext){
-        printf("%d\n",node->value);
-        node = node->pNext;
+};
+
+int main()
+{
+    {
+        Solution s;
+
+        // s.reversePrint()
     }
-    printf("%d\n",node->value);
-
-}
-void printListNodeReverse(ListNode *head){
-    if(head == nullptr)return;
-    if(head->pNext){
-        printListNodeReverse(head->pNext);
-        printf("%d\n",head->value);
-    }else{
-        printf("%d\n",head->value);
-    }
-}
-
-void destroyListNode(ListNode *head){
-    ListNode *node = head;
-    while(node){
-        ListNode *next = node->pNext;
-        delete node;
-        node = next;
-
-    }
-}
-void test1(){
-    ListNode *head = nullptr;
-    int nums[] = {1,2,3,4,56,7};
-    for(int x : nums){
-        addToTail(&head,x);
-    }
-    printListNodeReverse(head);
-
-    destroyListNode(head);
-}
-void test2(){
-    ListNode *head = nullptr;
-    int nums[] = {7};
-    for(int x : nums){
-        addToTail(&head,x);
-    }
-    printListNodeReverse(head);
-
-    destroyListNode(head);
-}
-void test3(){
-    ListNode *head = nullptr;
-
-    printListNodeReverse(head);
-
-    destroyListNode(head);
-}
-int main(){
-    test1();
-    test2();
-    test3();
 }

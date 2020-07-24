@@ -1,63 +1,78 @@
 //找出数组中任意一个重复的数字
+//在一个长度为 n 的数组 nums 里的所有数字都在 0～n-1 的范围内。数组中某些数字是重复的，但不知道有几个数字重复了，也不知道每个数字重复了几次。请找出数组中任意一个重复的数字。
+
+//in:2, 3, 1, 0, 2, 5, 3
+//out:2 or 3
 
 #include <iostream>
 #include <assert.h>
+#include <vector>
+#include <unordered_set>
+#include <algorithm>
 using namespace std;
-void sort(int *numbers,int length){
-    for(int i=0;i<length - 1;i++){
-        int low = i;
-        for(int j = i+1;j<length;j++){
-            if(*(numbers + low) > *(numbers + j)){
-                low = j;
+class Solution
+{
+public:
+    int findRepeatNumber(vector<int> &nums)
+    {
+        // (0)先排序在顺序查找
+        // (1)hash表存出现过的值
+        //
+        // unordered_set<int> tmp;
+        // for (auto x : nums)
+        // {
+        //     if (tmp.find(x) != tmp.end())
+        //     {
+        //         return x;
+        //     }
+        //     else
+        //     {
+        //         tmp.insert(x);
+        //     }
+        // }
+        // return -1;
+        //(2) 内部交换值
+        for (int i = 0; i < nums.size(); i++)
+        {
+            // if(nums[i])
+            while (nums[i] != i)
+            {
+
+                int m = nums[i];
+                if (nums[m] == m)
+                {
+                    return m;
+                }
+                int tmp = nums[m];
+                nums[m] = m;
+                nums[i] = tmp;
             }
         }
-        if(low != i){
-            int temp  = *(numbers + i);
-            *(numbers + i) = *(numbers + low);
-            *(numbers + low) = temp;
-        }
+        return -1;
     }
-}
-int find_repeat_number(int *numbers,int length,int *result){
-    if(!numbers)return 0;
-    sort(numbers,length);
-    for(int i = 0;i<length - 1;i++){
-        if(*(numbers+i) == *(numbers+i+1)){
-            *result = *(numbers+i);
-            return 1;
-        }
+};
+
+int main()
+{
+    {
+        Solution s;
+        vector<int> vec = {1, 2, 3, 6, 4, 5, 6};
+        int res = s.findRepeatNumber(vec);
+        cout << res << endl;
+        assert(res == 6);
     }
-    return 0;
-}
-void test1(){
-    int length = 10;
-    int numbers[] = {33,23,22,32,23,1,2,6,3,3};
-    int result = -1;
-    int res = find_repeat_number(numbers,length,&result);
-    assert(res == 1);
-    assert((
-        result == 23) || (result == 3));
-}
-void test2(){
-     int length = 0;
-    int numbers[] = {};
-
-    int result = -1;
-    int res = find_repeat_number(numbers,length,&result);
-    assert(res == 0);
-    assert(result == -1);
-}
-void test3(){
-    int length = 10;
-    int numbers[] = {1,2,3,4,5,6,7,8,9,10};
-
-    int result = -1;
-    int res = find_repeat_number(numbers,length,&result);
-    assert(res == 0);
-    assert(result == -1);
-}
-int main(){
-    test1();
-    test2();
-    test3();
+    {
+        Solution s;
+        vector<int> vec = {1, 2, 1, 6, 4, 5, 6};
+        int res = s.findRepeatNumber(vec);
+        cout << res << endl;
+        assert(res == 1 || res == 6);
+    }
+    {
+        Solution s;
+        vector<int> vec = {0, 1, 2, 3, 4, 5, 6};
+        int res = s.findRepeatNumber(vec);
+        cout << res << endl;
+        assert(res == -1);
+    }
 }

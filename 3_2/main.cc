@@ -1,6 +1,6 @@
 // 寻找重复数：n+1个数，取值范围是1-n，
 // 要求：数组不能变，空间复杂度O(n)，时间复杂度小于O(n*n)，有一个数至少重复一次，其他数字都是不重复的
-// 解法1：类似于二分查找，1-n分为两边，统计整个数组中[1-n/2]区间的值的个数，
+// 解法1：类似于二分查找，1-n分为两边，统计整个数组中属于[1-n/2]区间的值的个数，
 //      如果这个区间没有重复的值，那么个数肯定刚好等于middle，就换到另一个区间
 //      如果有重复值，就继续二分
 //      直到start和end相等时，指向的这个值就是要找的重复值
@@ -120,12 +120,14 @@ public:
 
 int main()
 {
-    vector<int> vec = {1, 3, 4, 2, 2};
-    Solution s;
-    assert(s.getcount(vec, vec.size(), 1, 3) == 4);
-    assert(s.getcount(vec, vec.size(), 2, 4) == 4);
-    assert(s.getcount(vec, vec.size(), 3, 4) == 2);
-    s.findDuplicate(vec);
+    {
+        vector<int> vec = {1, 3, 4, 2, 2};
+        Solution s;
+        assert(s.getcount(vec, vec.size(), 1, 3) == 4);
+        assert(s.getcount(vec, vec.size(), 2, 4) == 4);
+        assert(s.getcount(vec, vec.size(), 3, 4) == 2);
+        s.findDuplicate(vec);
+    }
     {
         vector<int> vec = {1, 3, 4, 2, 2};
         Solution s;
