@@ -6,55 +6,88 @@
 // 1)顺序查找
 // 2）类二分查找:比较第0个值与mid值，如果mid更大，说明min在后半部分；如果mid更小，说明min在前半部分
 // 特殊：nullptr，只有一个值，全部递增没有旋转
-//      start/mid/end的值相等时，不能判断min在前面还是后面，转为顺序查找
+//      start/mid/end的值相等时x，不能判断min在前面还是后面，转为顺序查找
 #include <iostream>
 #include <assert.h>
 #include <vector>
 using namespace std;
 
+// mid分别与left和right比较，大于小于和等于，总共有9种情况，分别考虑
+// TODO:可以合并
 class Solution
 {
 public:
     int minArray(vector<int> &numbers)
     {
-        int start = 0;
-        int end = numbers.size() - 1;
-        while (start <= end)
+        int left = 0;
+        int right = numbers.size() - 1;
+        while (left < right)
         {
-            // if (end == start)
-            // {
-            //     return numbers[start];
-            // }
-            // if (end - start == 1)
-            // {
-            //     return min(numbers[start], numbers[end]);
-            // }
-            int mid = (start + end) / 2;
-            if (numbers[start] < numbers[end])
+            int mid = (left + right) / 2;
+            if (numbers[mid] > numbers[left] && numbers[mid] > numbers[right])
             {
-                return numbers[start];
-            }
-            if (numbers[mid] > numbers[start])
-            {
-                start = mid;
+                left = mid + 1;
                 continue;
             }
-            if (numbers[mid] < numbers[end])
+            else if (numbers[mid] > numbers[left] && numbers[mid] < numbers[right])
             {
-                end = mid;
+                return numbers[left];
+            }
+            else if (numbers[mid] > numbers[left] && numbers[mid] == numbers[right])
+            {
+                // 1 3 3
+                return numbers[left];
+            }
+            else if (numbers[mid] < numbers[left] && numbers[mid] < numbers[right])
+            {
+                right = mid;
                 continue;
             }
-            int minvalue = numbers[start];
-            for (int i = start; i <= end; i++)
+            else if (numbers[mid] < numbers[left] && numbers[mid] > numbers[right])
             {
-                if (numbers[i] < minvalue)
+                //  20 2 1
+                return -1;
+            }
+            else if (numbers[mid] < numbers[left] && numbers[mid] == numbers[right])
+            {
+                int min = numbers[left];
+                for (int i = left; i < right + 1; i++)
                 {
-                    minvalue = numbers[i];
+                    min = min < numbers[i] ? min : numbers[i];
                 }
+                return min;
             }
-            return minvalue;
+            else if (numbers[mid] == numbers[left] && numbers[mid] < numbers[right])
+            {
+                int min = numbers[left];
+                for (int i = left; i < right + 1; i++)
+                {
+                    min = min < numbers[i] ? min : numbers[i];
+                }
+                return min;
+            }
+            else if (numbers[mid] == numbers[left] && numbers[mid] == numbers[right])
+            {
+                int min = numbers[left];
+                for (int i = left; i < right + 1; i++)
+                {
+                    min = min < numbers[i] ? min : numbers[i];
+                }
+                return min;
+            }
+            else if (numbers[mid] == numbers[left] && numbers[mid] > numbers[right])
+            {
+                // 20 20 1 2
+                int min = numbers[left];
+                for (int i = left; i < right + 1; i++)
+                {
+                    min = min < numbers[i] ? min : numbers[i];
+                }
+                return min;
+            }
+            return -1;
         }
-        return 0;
+        return numbers[right];
     }
 };
 
