@@ -4,7 +4,7 @@
 
 #include <iostream>
 using namespace std;
-
+// (1)
 class Solution
 {
 public:
@@ -30,7 +30,7 @@ public:
         return second;
     }
 };
-
+// (2)
 // class Solution
 // {
 // public:

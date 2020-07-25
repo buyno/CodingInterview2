@@ -8,48 +8,38 @@
 #include "../utils/Tree.h"
 #include "stdio.h"
 #include <assert.h>
-TreeNode *getLeftestChildNode(TreeNode *node)
-{
-    TreeNode *res = node;
-    while (res->left)
-    {
-        res = res->left;
-    }
-    return res;
-}
 
-TreeNode *getNext(TreeNode *node)
+TreeNode *getNext(TreeNode *cur)
 {
-    if (!node)
+    if (!cur)
+    {
         return nullptr;
+    }
     // 如果有右子树，那么下一个是右子树中最左边的节点
+    if (cur->right)
+    {
+        TreeNode *rightmostnode = cur->right;
+        while (rightmostnode->left)
+        {
+            rightmostnode = rightmostnode->left;
+        }
+        return rightmostnode;
+    }
     // 如果没有右子树，并且是左子节点，下一个就是他的父节点
+    else if (cur->parent && cur->parent->left == cur)
+    {
+        return cur->parent;
+    }
     // 如果没有右子树，并且不是左子节点，那就向父节点查找，直到找到某个父节点是其父节点的左子节点时，这个父节就是下一个
-    // 如果都没有找到，就没有后续节点
-    if (node->right)
-    {
-        TreeNode *temp = getLeftestChildNode(node->right);
-        return temp;
-    }
-    else if (node->parent && node->parent->left == node)
-    {
-        return node->parent;
-    }
     else
     {
-        TreeNode *p = node->parent;
-        while (p)
+        TreeNode *iter = cur;
+        while (iter->parent && iter->parent->right == iter)
         {
-            if (p->parent && p->parent->left == p)
-            {
-                return p->parent;
-            }
-            p = p->parent;
+            iter = iter->parent;
         }
-        return nullptr;
+        return iter->parent;
     }
-    return nullptr;
-    // return head->left->right->left;
 }
 // 普通二叉树
 void test1()
