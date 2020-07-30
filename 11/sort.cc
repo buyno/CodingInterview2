@@ -21,12 +21,14 @@ void bubble_sort(int *nums, int length)
         }
     }
 }
-//插入排序
+//x插入排序x
+// 这不是插入排序，这是选择排序
 void insert_sort(int nums[], int length)
 {
 
     for (int i = 0; i < length - 1; i++)
     {
+        //从i到结尾，找到最小值的下标，然后与i交换
         int minindex = i;
         for (int j = i + 1; j < length; j++)
         {
@@ -112,7 +114,45 @@ void merge_sort(int nums[], int length)
 {
     merge_sort(nums, 0, length - 1);
 }
-
+//快排
+// 思路：选一个中间点，大于的移到右边，小于的移到左边。再分别递归左边和右边
+void quick_sort(int nums[], int length)
+{
+    quick_sort_helper(nums, 0, length - 1);
+}
+void quick_sort_helper(int nums[], int start, int end)
+{
+    int mid = (start + end) / 2;
+    int midvalue;
+    if (nums[mid] <= nums[start] && nums[mid] <= nums[end])
+    {
+        midvalue = nums[mid];
+    }
+    else if (nums[mid] <= nums[start] && nums[start] <= nums[end])
+    {
+        midvalue = nums[start];
+    }
+    else
+    {
+        midvalue = nums[end];
+    }
+    int left = start;
+    int right = end;
+    while (left < right)
+    {
+        while (nums[left] < midvalue)
+        {
+            left++;
+        }
+        while (nums[right] > midvalue)
+        {
+            right--;
+        }
+        int tmp = nums[right];
+        nums[right] = nums[left];
+        nums[left] = tmp;
+    }
+}
 int main()
 {
     int nums[] = {1, 15, 12, 2, 43, 65, 87, 3, 45, 49, 4, 61, 92, 5, 39, 6, 7, 99, 8, 90, 9};

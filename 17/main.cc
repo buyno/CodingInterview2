@@ -1,7 +1,7 @@
 // 打印从1到最大的n位数
 
-// int最高到9位
-
+// *int最高到9位
+// leetcode上的题有问题，本来应该是考察大数问题的，位数也不应该有限制
 #include <stdio.h>
 #include <vector>
 #include <stdlib.h>
@@ -74,9 +74,17 @@ void print(int n)
         printNumber(nums);
     }
 }
-
+class Solution
+{
+public:
+    vector<int> printNumbers(int n)
+    {
+        vector<int> result;
+    }
+};
 int main()
 {
-    print(-2);
-    print(6);
+    // print(-2);
+    // print(6);
+    printf("%d\n", __INT_MAX__);
 }
