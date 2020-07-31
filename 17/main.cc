@@ -5,6 +5,9 @@
 #include <stdio.h>
 #include <vector>
 #include <stdlib.h>
+#include <math.h>
+#include <string>
+#include <iostream>
 using namespace std;
 
 int addone(char *nums)
@@ -79,12 +82,52 @@ class Solution
 public:
     vector<int> printNumbers(int n)
     {
-        vector<int> result;
+        // 因为返回值限制为int，所以还是不能处理大数问题
+        vector<int> result(pow(10, n) - 1);
+        // int lastnumber = pow(10, n) - 1;
+        // for (int i = 1; i <= lastnumber; i++)
+        // {
+        //     result[i - 1] = i;
+        // }
+        string str(n + 1, '0');
+        string end(n, '9');
+        end = "0" + end;
+        int i = 0;
+        while (str != end)
+        {
+            // result[i++] = stoi(str);
+            strAddOne(str);
+            // cout << str << endl;
+            result[i++] = stoi(str);
+        }
+        return result;
+    }
+    void strAddOne(string &str)
+    {
+        int bit = 1;
+        for (int i = str.size() - 1; i >= 0; i--)
+        {
+            int value = str[i] - '0' + bit;
+            if (value >= 10)
+            {
+                str[i] = value - 10 + '0';
+                bit = 1;
+            }
+            else
+            {
+                str[i] = value + '0';
+                bit = 0;
+            }
+        }
+        // cout << str << endl;
     }
 };
 int main()
 {
-    // print(-2);
-    // print(6);
-    printf("%d\n", __INT_MAX__);
+    Solution s;
+    auto res = s.printNumbers(2);
+    for (auto x : res)
+    {
+        cout << x << endl;
+    }
 }
