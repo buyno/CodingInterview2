@@ -1,5 +1,6 @@
 //https://leetcode-cn.com/problems/shu-de-zi-jie-gou-lcof/
-
+// 树的子结构
+// 输入两棵二叉树A和B，判断B是不是A的子结构。(约定空树不是任意一个树的子结构)
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>

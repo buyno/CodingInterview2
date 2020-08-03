@@ -3,89 +3,48 @@
 // 用两个指针代表两个树,一个是原树，一个是想象的对称树
 // 递归比较原树左子树与对称树的右子树，原树右子树与对称树的左子树
 // X解决：前序遍历序列和前序遍历镜像序列相同X
-#include <stdio.h>
+#include <iostream>
 #include <assert.h>
-#include "../utils/Tree.h"
-// return 1 是镜像； 0不是镜像树
-int isTreeMirror(TreeNode *root1, TreeNode *root2)
-{
-    if (root1 == nullptr && root2 == nullptr)
-    {
-        return 1;
-    }
-    if (root1 == nullptr || root2 == nullptr)
-    {
-        return 0;
-    }
+using namespace std;
 
-    if (root1->value != root2->value)
-    {
-        return 0;
-    }
-    else
-    {
-        return isTreeMirror(root1->left, root2->right) && isTreeMirror(root1->right, root2->left);
-    }
-}
-int isTreeMirror(TreeNode *root)
+struct TreeNode
 {
-    return isTreeMirror(root, root);
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+};
 
-    // return 0;
-}
-void Test1()
+class Solution
 {
-    TreeNode *root = new TreeNode(8);
-    root->left = new TreeNode(6);
-    root->right = new TreeNode(6);
-    root->left->left = new TreeNode(5);
-    root->left->right = new TreeNode(7);
-    root->right->left = new TreeNode(7);
-    root->right->right = new TreeNode(5);
-    int res = isTreeMirror(root);
-    assert(res == 1);
-}
-void Test2()
-{
-    TreeNode *root = nullptr;
-    int res = isTreeMirror(root);
-    assert(res == 1);
-}
-void Test3()
-{
-    TreeNode *root = new TreeNode(8);
-    root->left = new TreeNode(6);
-    root->right = new TreeNode(6);
-    root->left->left = new TreeNode(5);
-    root->left->right = new TreeNode(7);
-    root->right->left = new TreeNode(7);
-    root->right->right = new TreeNode(6);
-    int res = isTreeMirror(root);
-    assert(res == 0);
-}
-void Test4()
-{
-    TreeNode *root = new TreeNode(8);
-    root->left = new TreeNode(6);
-    root->right = new TreeNode(6);
-    root->left->left = new TreeNode(5);
-    root->left->right = new TreeNode(7);
-    root->right->left = new TreeNode(7);
-    int res = isTreeMirror(root);
-    assert(res == 0);
-}
-void Test5()
-{
-    TreeNode *root = new TreeNode(8);
+public:
+    bool isSymmetric(TreeNode *root)
+    {
+        TreeNode *iter1 = root;
+        TreeNode *iter2 = root;
+        return isSymmetric(iter1, iter2);
+    }
+    bool isSymmetric(TreeNode *iter1, TreeNode *iter2)
+    {
+        if (!iter1 && !iter2)
+        {
+            return true;
+        }
+        if (!iter1 || !iter2)
+        {
+            return false;
+        }
+        if (iter1 && iter2 && iter1->val == iter2->val)
+        {
+            return isSymmetric(iter1->left, iter2->right) && isSymmetric(iter1->right, iter2->left);
+        }
+        return false;
+    }
+};
 
-    int res = isTreeMirror(root);
-    assert(res == 1);
-}
 int main()
 {
-    Test1();
-    Test2();
-    Test3();
-    Test4();
-    Test5();
+    {
+        Solution s;
+    }
 }

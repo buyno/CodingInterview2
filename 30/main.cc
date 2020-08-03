@@ -2,65 +2,58 @@
 
 // 两个栈，附加栈用于记录当前的最小值
 
-// 在每次pop和top之前都判断一次栈是否为空
 #include <stack>
-#include <stdio.h>
 #include <assert.h>
-
+#include <iostream>
 using namespace std;
 
-template <typename T>
-class MyStack{
+class MinStack
+{
 public:
-    T min();
-    void pop();
-    int top();
-    void push(T number);
-    int empty(){
-        return data.empty();
+    /** initialize your data structure here. */
+    MinStack()
+    {
     }
-    stack<T> data;
-    stack<T> mins;
-    T minnumber;
-};
-template <typename T>
-int MyStack<T>::top(){
-    return data.top();
-}
-template <typename T>
-void MyStack<T>::pop(){
-    if(data.empty()){
-        return;
-    }
-    data.pop();
-    mins.pop();
-    if(!data.empty()){
-        minnumber = mins.top();
-    }
-}
-template <typename T>
-void MyStack<T>::push(T number){
-    data.push(number);
-    if(mins.empty()){
-        mins.push(number);
-    }else{
-        if(mins.top() > number){
-            mins.push(number);
-        }else{
-            mins.push(mins.top());
+
+    void push(int x)
+    {
+        data.push(x);
+        if (minvalue.empty())
+        {
+            minvalue.push(x);
+        }
+        else if (x <= minvalue.top())
+        {
+            minvalue.push(x);
+        }
+        else
+        {
+            minvalue.push(minvalue.top());
         }
     }
 
-    minnumber = mins.top();
-}
-template <typename T>
-T MyStack<T>::min(){
-    return minnumber;
-}
+    void pop()
+    {
+        data.pop();
+        minvalue.pop();
+    }
 
-int main(){
-    MyStack<int> test;
-    assert(test.empty() == 1);
+    int top()
+    {
+        return data.top();
+    }
+
+    int min()
+    {
+        return minvalue.top();
+    }
+    stack<int> data;
+    stack<int> minvalue;
+};
+int main()
+{
+    MinStack test;
+    // assert(test.empty() == 1);
     test.push(10);
     assert(test.min() == 10);
 
@@ -73,5 +66,5 @@ int main(){
     test.pop();
     assert(test.min() == 10);
     test.pop();
-    assert(test.empty() == 1);
+    // assert(test.empty() == 1);
 }
