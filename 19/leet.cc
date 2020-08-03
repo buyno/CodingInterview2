@@ -38,7 +38,7 @@ public:
             //.*,相当于.出现0或多次
             if (p[pindex] == '.' && s.length() - sindex > 0)
             {
-                return isMatchHelper(s, sindex + 0, p, pindex + 2) || isMatchHelper(s, sindex + 1, p, pindex + 0) || isMatchHelper(s, sindex + 1, p, pindex + 2);
+                return isMatchHelper(s, sindex + 0, p, pindex + 2) || isMatchHelper(s, sindex + 1, p, pindex + 0);
             }
             // 正常的a*
             else

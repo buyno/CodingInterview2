@@ -3,57 +3,93 @@
 #include <string.h>
 #include <stdio.h>
 #include <assert.h>
-// return:1匹配,0不匹配
-int compare(const char *str, const char *pattern)
-{
-    if (str == nullptr || pattern == nullptr)
-        return 0;
-    //两个一起结束
-    if (*str == 0 && *pattern == 0)
-    {
-        return 1;
-    }
-    // str结束，pattern没结束
-    // if(*str == 0  && *pattern != 0){
+#include <string>
+#include <iostream>
+using namespace std;
 
-    // }
-    // str没结束，pattern结束
-    if (*str != 0 && *pattern == 0)
+class Solution
+{
+public:
+    bool isMatch(string s, string p)
     {
-        return 0;
+        int indexs, indexp;
+        indexs = 0;
+        indexp = 0;
+        return isMatch(s, 0, p, 0);
     }
-    //有*的时候，分为.*和a*两种情况
-    if (pattern[1] == '*')
+    int isMatch(string &s, int indexs, string &p, int indexp)
     {
-        if (pattern[0] == '.' && *str != '\0')
-        { // str+1可能越界，所以要加判断
-            // .*出现0次 || .*已匹配一次再匹配 || .*只匹配一次
-            return compare(str, pattern + 2) || compare(str + 1, pattern) || compare(str + 1, pattern + 2);
+        //同时结束
+        if (indexs == s.length() && indexp == p.length())
+        {
+            return 1;
+        }
+        // s没结束，p先结束,一定不匹配
+        if (indexs < s.length() && indexp == p.length())
+        {
+            return 0;
+        }
+        if (indexp + 1 < p.length() && p[indexp + 1] == '*')
+        {
+            if (p[indexp] == '.')
+            {
+                //.*不起作用 || .*匹配多个字符
+                // 涉及到indexs的都必须检查是否越界
+                auto res = isMatch(s, indexs, p, indexp + 2) ||
+                           (indexs < s.length() && isMatch(s, indexs + 1, p, indexp));
+                return res;
+            }
+            else
+            {
+                // a* 0次 || >1次
+                // 涉及到indexs的都必须检查是否越界
+                auto res = isMatch(s, indexs, p, indexp + 2) ||
+                           (s[indexs] == p[indexp] && isMatch(s, indexs + 1, p, indexp));
+
+                return res;
+            }
         }
         else
         {
-            int res = compare(str, pattern + 2);
-            if (pattern[0] == str[0])
+            if (indexs < s.length() && (s[indexs] == p[indexp] || p[indexp] == '.'))
             {
-                res = res || compare(str + 1, pattern);
+                return isMatch(s, indexs + 1, p, indexp + 1);
             }
-            return res;
+            else
+            {
+                return false;
+            }
         }
     }
-    if (pattern[0] == '.' || str[0] == pattern[0])
-    {
-        return compare(str + 1, pattern + 1);
-    }
-    return 0;
-}
-
-void test(const char *str, const char *pattern, int expected)
+};
+void test(string str, string pattern, int expected)
 {
-    assert(compare(str, pattern) == expected);
-}
+    Solution s;
 
+    assert(s.isMatch(str, pattern) == expected);
+}
 int main()
 {
+    Solution s;
+    assert(s.isMatch("", ""));
+    assert(!s.isMatch("", "abc"));
+    assert(!s.isMatch("abc", ""));
+    assert(s.isMatch("abc", "abc"));
+    assert(s.isMatch("abc", "a.c"));
+    assert(s.isMatch("ac", "ab*c"));
+    assert(s.isMatch("abc", "ab*c"));
+    assert(s.isMatch("abbc", "ab*c"));
+    assert(s.isMatch("ac", "ab*c"));
+    assert(s.isMatch("abc", "a.*c"));
+    assert(s.isMatch("ac", "a.*c"));
+    assert(s.isMatch("abec", "a.*c"));
+
+    assert(s.isMatch("aa", "a*"));
+    assert(!s.isMatch("mississippi", "mis*is*p*."));
+    assert(!s.isMatch("aaaaaaaaaaaaab",
+                      "a*a*a*a*a*a*a*a*a*a*c"));
+
+    assert(!s.isMatch("bccbbabcaccacbcacaa", ".*b.*c*.*.*.c*a*.c"));
     test("abc", "a*bc", 1);
     test("abc", "a.c", 1);
     test("abc", "acc", 0);
@@ -93,9 +129,9 @@ int main()
     test("aaba", "ab*a*c*a", 0);
     test("bbbba", ".*a*a", 1);
     test("bcbbabab", ".*a*a", 0);
-    // .*是0或n个.
+    // // .*是0或n个.
     test("abcc", ".*cc", 1);
-    test("ab", ".*c", 1);
+    test("ab", ".*c", 0);
 
     test("abcb", "abc*b*", 1);
     printf("All tests pass.\n");
