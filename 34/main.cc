@@ -4,80 +4,103 @@
 
 #include <vector>
 #include <stdio.h>
-#include "../utils/Tree.h"
-
+#include <iostream>
 using namespace std;
-void findPath(TreeNode *root, int requestSum, vector<vector<int>> &pathes, vector<int> &path)
+
+struct TreeNode
 {
-    if (root == nullptr)
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+};
+
+class Solution
+{
+public:
+    vector<vector<int>> pathSum(TreeNode *root, int sum)
     {
-        return;
-    }
-    //到了叶子节点
-    if (!root->left && !root->right)
-    {
-        if (root->value == requestSum)
+        if (!root)
         {
-            path.push_back(root->value);
-            pathes.push_back(path);
-            path.pop_back();
+            return {};
+        }
+        vector<int> path;
+        vector<vector<int>> result;
+        pathSum(root, sum, path, result);
+        return result;
+    }
+    int pathSum(TreeNode *root, int sum, vector<int> &path, vector<vector<int>> &result)
+    {
+        if (!root->left && !root->right)
+        {
+            if (sum == root->val)
+            {
+                path.push_back(root->val);
+                result.push_back(path);
+                path.pop_back();
+                return 1;
+            }
+            else
+            {
+                return 0;
+            }
         }
         else
         {
-            //找到底了还是不符合，退回到上一层
-            return;
+            path.push_back(root->val);
+            int res = 0;
+            if (root->left)
+            {
+                res = pathSum(root->left, sum - root->val, path, result) || res;
+            }
+            if (root->right)
+            {
+                res = pathSum(root->right, sum - root->val, path, result) || res;
+            }
+            path.pop_back();
+            return res;
         }
     }
-    else
-    {
-        //没有到底，就只是减去value
-        path.push_back(root->value);
-        findPath(root->left, requestSum - root->value, pathes, path);
-        findPath(root->right, requestSum - root->value, pathes, path);
-        path.pop_back();
-    }
-}
-vector<vector<int>> findPath(TreeNode *root, int requestSum)
-{
-
-    vector<vector<int>> pathes;
-    vector<int> path;
-
-    findPath(root, requestSum, pathes, path);
-
-    return pathes;
-}
+};
 int main()
 {
-    //没有路径
-    // TreeNode *root = new TreeNode(10);
-    // root->left = new TreeNode(5);
-    // root->right = new TreeNode(13);
-    // root->left->left = new TreeNode(4);
-    // root->left->right = new TreeNode(6);
-    //一条路径
-    // TreeNode *root = new TreeNode(10);
-    // root->left = new TreeNode(5);
-    // root->right = new TreeNode(12);
-    // root->left->left = new TreeNode(4);
-    // root->left->right = new TreeNode(6);
-    //两条路径
-    // TreeNode *root = new TreeNode(10);
-    // root->left = new TreeNode(5);
-    // root->right = new TreeNode(12);
-    // root->left->left = new TreeNode(4);
-    // root->left->right = new TreeNode(7);
-    //null
-    TreeNode *root = nullptr;
-
-    vector<vector<int>> res = findPath(root, 22);
-
-    for (auto x : res)
     {
-        for (auto y : x)
+        TreeNode *root = new TreeNode(10);
+        root->left = new TreeNode(5);
+        root->right = new TreeNode(13);
+        root->left->left = new TreeNode(4);
+        root->left->right = new TreeNode(6);
+        Solution s;
+        auto res = s.pathSum(root, 22);
+        for (auto x : res)
         {
-            printf("%d ", y);
+            for (auto y : x)
+            {
+                cout << y << " ";
+            }
+            cout << endl;
         }
-        printf("\n");
+    }
+    {
+        TreeNode *root = new TreeNode(5);
+        root->left = new TreeNode(4);
+        root->right = new TreeNode(8);
+        root->left->left = new TreeNode(11);
+        root->right->left = new TreeNode(13);
+        root->right->right = new TreeNode(4);
+        root->left->left->left = new TreeNode(7);
+        root->left->left->right = new TreeNode(2);
+        root->right->right->left = new TreeNode(5);
+        root->right->right->right = new TreeNode(1);
+        Solution s;
+        auto res = s.pathSum(root, 22);
+        for (auto x : res)
+        {
+            for (auto y : x)
+            {
+                cout << y << " ";
+            }
+            cout << endl;
+        }
     }
 }

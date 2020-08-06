@@ -2,35 +2,49 @@
 
 // 用一个队列保存子节点
 
-#include <stdio.h>
+#include <iostream>
+#include <vector>
 #include <queue>
-#include "../utils/Tree.h"
 using namespace std;
 
-void printTree(TreeNode *root)
+struct TreeNode
 {
-    if (root == nullptr)
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+};
+
+class Solution
+{
+public:
+    vector<int> levelOrder(TreeNode *root)
     {
-        return;
-    }
-    queue<TreeNode *> data;
-    data.push(root);
-    while (!data.empty())
-    {
-        TreeNode *tmp = data.front();
-        data.pop();
-        printf("%d ", tmp->value);
-        if (tmp->left)
+        queue<TreeNode *> temp;
+        TreeNode *node = root;
+        vector<int> result;
+        while (node)
         {
-            data.push(tmp->left);
+            result.push_back(node->val);
+            // cout << node->val << endl;
+            if (node->left)
+            {
+                temp.push(node->left);
+            }
+            if (node->right)
+            {
+                temp.push(node->right);
+            }
+            if (temp.empty())
+            {
+                break;
+            }
+            node = temp.front();
+            temp.pop();
         }
-        if (tmp->right)
-        {
-            data.push(tmp->right);
-        }
+        return result;
     }
-    printf("\n");
-}
+};
 int main()
 {
     TreeNode *root = new TreeNode(8);
@@ -41,6 +55,12 @@ int main()
     root->right->left = new TreeNode(9);
     root->right->right = new TreeNode(11);
 
-    printTree(root);
-    // printTree(nullptr);
+    Solution s;
+    auto res = s.levelOrder(root);
+    for (auto x : res)
+    {
+        cout << x << " ";
+    }
+    cout << endl;
 }
+s

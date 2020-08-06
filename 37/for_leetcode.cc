@@ -3,7 +3,7 @@
 #include <string.h>
 #include <assert.h>
 #include <sstream>
-
+// 先序遍历的解法
 // 使用sstream之后反而降低了，说明sstream是浪费性能的
 // 未使用sstream的在leetcode提交
 using namespace std;

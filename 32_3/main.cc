@@ -1,7 +1,10 @@
 // 之字形打印二叉树
+// 两个栈 或者 一个双端队列
 #include <stdio.h>
 #include <vector>
 #include <stack>
+#include <queue>
+#include <iostream>
 using namespace std;
 
 struct TreeNode
@@ -16,73 +19,124 @@ class Solution
 public:
     vector<vector<int>> levelOrder(TreeNode *root)
     {
-
-        vector<vector<int>> res;
-        if (root == nullptr)
+        if (!root)
         {
-            return res;
+            return {};
         }
-        stack<TreeNode *> s1, s2;
-        s1.push(root);
-        while (!s1.empty() || !s2.empty())
+        stack<TreeNode *> s1; //偶数层
+        stack<TreeNode *> s2;
+        TreeNode *node = root;
+        s1.push(node);
+        vector<vector<int>> result;
+        int level = 0;
+        result.push_back(vector<int>());
+        while (node)
         {
-            vector<int> vec;
-            while (!s1.empty())
+            if (level % 2 == 0)
             {
-                TreeNode *tmp = s1.top();
-                vec.push_back(tmp->val);
-                s1.pop();
-                if (tmp->left)
+                int size = s1.size();
+                while (size)
                 {
-                    s2.push(tmp->left);
+                    node = s1.top();
+                    s1.pop();
+                    result[level].push_back(node->val);
+                    if (node->left)
+                    {
+                        s2.push(node->left);
+                    }
+                    if (node->right)
+                    {
+                        s2.push(node->right);
+                    }
+                    size--;
                 }
-                if (tmp->right)
-                {
-                    s2.push(tmp->right);
-                }
-            }
-            if (!vec.empty())
-            {
-                res.push_back(vec);
-                vec.clear();
-            }
 
-            while (!s2.empty())
-            {
-                TreeNode *tmp = s2.top();
-                vec.push_back(tmp->val);
-                s2.pop();
-                if (tmp->right)
+                if (s2.empty())
                 {
-                    s1.push(tmp->right);
+                    break;
                 }
-                if (tmp->left)
+                else
                 {
-                    s1.push(tmp->left);
+                    level++;
+                    result.push_back(vector<int>());
                 }
             }
-            if (!vec.empty())
-                res.push_back(vec);
+            else
+            {
+                int size = s2.size();
+                while (size)
+                {
+                    node = s2.top();
+                    s2.pop();
+                    result[level].push_back(node->val);
+                    if (node->right)
+                    {
+                        s1.push(node->right);
+                    }
+                    if (node->left)
+                    {
+                        s1.push(node->left);
+                    }
+                    size--;
+                }
+                if (s1.empty())
+                {
+                    break;
+                }
+                else
+                {
+                    level++;
+                    result.push_back(vector<int>());
+                }
+            }
         }
-        return res;
+        return result;
     }
 };
 
 int main()
 {
-    TreeNode *root = new TreeNode(3);
-    root->left = new TreeNode(9);
-    root->right = new TreeNode(20);
-    root->right->left = new TreeNode(15);
-    root->right->right = new TreeNode(7);
-    Solution s;
-    auto res = s.levelOrder(root);
-    for (auto x : res)
     {
-        for (auto y : x)
+        TreeNode *root = new TreeNode(3);
+        root->left = new TreeNode(9);
+        root->right = new TreeNode(20);
+        root->right->left = new TreeNode(15);
+        root->right->right = new TreeNode(7);
+        Solution s;
+        auto res = s.levelOrder(root);
+        for (auto x : res)
         {
-            printf("%d ", y);
+            for (auto y : x)
+            {
+                printf("%d ", y);
+            }
+            printf("\n");
         }
-        printf("\n");
+    }
+    {
+        TreeNode *root = new TreeNode(3);
+        Solution s;
+        auto res = s.levelOrder(root);
+        for (auto x : res)
+        {
+            for (auto y : x)
+            {
+                printf("%d ", y);
+            }
+            printf("\n");
+        }
+    }
+    {
+        TreeNode *root = nullptr;
+        Solution s;
+        auto res = s.levelOrder(root);
+        for (auto x : res)
+        {
+            for (auto y : x)
+            {
+                printf("%d ", y);
+            }
+            printf("\n");
+        }
     }
 }
