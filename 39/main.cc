@@ -3,16 +3,16 @@
 // 测试：
 // 时间复杂度测试
 // 循环数：10000000
-// 方法一：
+// 方法一：map
 // 74.000000s
-// 方法二:
+// 方法二:unordered_map
 // 63.000000s
-// 方法三:
+// 方法三:排序后逐个查找
 // 17.000000s
-// 方法四:
+// 方法四:快排
 // 1.000000s
 // 1.000000s
-// 方法五:
+// 方法五:计数超过一般
 // 1.000000s
 #include <map>
 #include <unordered_map>
@@ -22,6 +22,7 @@
 #include <algorithm>
 
 using namespace std;
+// 用map保存每个数字出现的次数
 // return:过半1，未过半0
 // 时间复杂度O(nlog(n))
 int ifOverHalf_1(int *numbers, int length)
@@ -51,6 +52,7 @@ int ifOverHalf_1(int *numbers, int length)
     // printf("没有过半\n");
     return 0;
 }
+// 用unordered_map保存每个数字出现的次数
 // 时间复杂度不是O(n)
 int ifOverHalf_2(int *numbers, int length)
 {

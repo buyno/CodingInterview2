@@ -1,97 +1,74 @@
 // 翻转字符串:"i am a student."->"student. a am i"
 // 1) 先全部反转，再每个单词反转
 // 2) STL的栈
+// 3) 从后往前遍历，得到一个单词就把它加到result的前边(result += temp比result = result+temp效率高得多)
+//
+// 如果要求去掉单词中间的多余空格，就不能用反转再反转的方法了。
 #include <stdio.h>
 #include <string.h>
 #include <stack>
 #include <string>
+#include <iostream>
 using namespace std;
 
-// length是不包含\0的实际长度
-void reverseString(char *str, int length)
+class Solution
 {
-    if (str == nullptr || length <= 0)
+public:
+    string reverseWords(string s)
     {
-        return;
-    }
-    printf("str:%s\n", str);
-    for (int i = 0; i < length / 2; i++)
-    {
-        char tmp = str[i];
-        str[i] = str[length - i - 1];
-        str[length - i - 1] = tmp;
-    }
-    int start = 0;
-    int end = 0;
-    for (int i = 0; i <= length; i++)
-    {
-        if (str[i] == ' ' || str[i] == '\0')
+        if (s == "")
         {
-            end = i - 1;
-            for (int j = start; j < start + (end - start + 1) / 2; j++)
-            {
-                char tmp = str[j];
-                str[j] = str[end - (j - start)];
-                str[end - (j - start)] = tmp;
-            }
-            start = i + 1;
+            return "";
         }
-    }
-    printf("reverse:%s\n", str);
-}
-void reverseString_2(char *str, int length)
-{
-    if (str == nullptr || length <= 0)
-    {
-        return;
-    }
-    printf("str:%s\n", str);
-    stack<string> s;
-    int start = 0;
-    int end = 0;
-    for (int i = 0; i <= length; i++)
-    {
-        if (str[i] == ' ' || str[i] == '\0')
+        string result;
+        int index = s.length() - 1;
+        int end = index;
+        while (index >= 0)
         {
-            string tmp(str + start, end - start);
-            end++;
-            start = i + 1;
-            s.push(tmp);
+            if (s[index] == ' ')
+            {
+                if (index != end)
+                {
+                    result += s.substr(index + 1, end - index - 1 + 1) + " ";
+                    // cout << s.substr(index + 1, end - index - 1 + 1) << endl;
+                    // index--;
+                    end = index - 1;
+                }
+                else
+                {
+                    end--;
+                    // index--;
+                }
+            }
+            index--;
+        }
+        if (index != end)
+        {
+            result += s.substr(index + 1, end - index - 1 + 1);
         }
         else
         {
-            end++;
+            if (result.length() > 0)
+            {
+                result.erase(result.length() - 1, 1);
+            }
         }
+        return result;
     }
-    printf("reverse:");
-    while (!s.empty())
-    {
-        printf("%s ", s.top().c_str());
-        s.pop();
-    }
-    printf("\n");
-}
+};
+
 int main()
 {
-    int length = 19;
-    char *str = new char[length + 1];
-    strcpy(str, "intel am a student.");
-    reverseString(str, length);
-    strcpy(str, "busy");
-    length = 4;
-    reverseString(str, length);
-    delete str;
-    str = nullptr;
-    reverseString(str, length);
-
-    length = 19;
-    str = new char[length + 1];
-    strcpy(str, "intel am a student.");
-    reverseString_2(str, length);
-    strcpy(str, "busy");
-    length = 4;
-    reverseString_2(str, length);
-    delete str;
-    str = nullptr;
-    reverseString_2(str, length);
+    {
+        Solution s;
+        string str = "the sky is blue";
+        auto res = s.reverseWords(str);
+        cout << res << endl;
+    }
+    {
+        Solution s;
+        string str = "   the sky   is blue  ";
+        auto res = s.reverseWords(str);
+        cout << res << endl;
+    }
 }

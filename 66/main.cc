@@ -1,60 +1,51 @@
-//构建乘积数组：由A[n]得到B[n]，B[i] = A[0]*A[1]*...*A[i-1]*A[i+1]*...A[n]
+// 给定一个数组 A[0,1,…,n-1]，请构建一个数组 B[0,1,…,n-1]，其中 B 中的元素 B[i]=A[0]×A[1]×…×A[i-1]×A[i+1]×…×A[n-1]。不能使用除法。
 
 //两个循环，第一个从前往后，得到截止A[i-1]的乘积，保存在B[i]中。
 // 第二个循环从后往前，得到后半部的乘积在累乘到B[]对应位置
-#include <stdio.h>
-// O(n*n)
-void getArray_1(int *a, int length, int *b)
+#include <vector>
+#include <iostream>
+using namespace std;
+
+class Solution
 {
-    int tmp = 1;
-    for (int i = 0; i < length; i++)
-        tmp *= a[i];
-    for (int i = 0; i < length; i++)
+public:
+    vector<int> constructArr(vector<int> &a)
     {
-        if (a[i] != 0)
+        if (a.size() == 0)
         {
-            b[i] = tmp / a[i];
+            return {};
         }
-        else
+        else if (a.size() == 1)
         {
-            for (int j = 0; j < length; j++)
-            {
-                if (i != j)
-                {
-                    b[i] *= a[j];
-                }
-            }
+            return {1};
         }
+        vector<int> result(a.size());
+        int temp = 1;
+        result[0] = 1;
+        for (int i = 1; i < a.size(); i++)
+        {
+            temp *= a[i - 1];
+            result[i] = temp;
+        }
+        temp = 1;
+        for (int i = a.size() - 2; i >= 0; i--)
+        {
+            temp = temp * a[i + 1];
+            result[i] = result[i] * temp;
+        }
+
+        return result;
     }
-}
-//O(n)
-void getArray_2(int *a, int length, int *b)
-{
-    if (a == nullptr || b == nullptr || length <= 1)
-    {
-        return;
-    }
-    b[0] = 1;
-    for (int i = 1; i < length; i++)
-    {
-        b[i] = b[i - 1] * a[i - 1];
-    }
-    int tmp = 1;
-    for (int i = length - 1 - 1; i >= 0; i--)
-    {
-        tmp *= a[i + 1];
-        b[i] *= tmp;
-    }
-}
+};
 int main()
 {
-    int a[] = {1, 2, 3, 4, 5};
-    int length = sizeof(a) / sizeof(a[0]);
-    int b[length] = {1, 1, 1, 1, 1};
-    getArray_2(a, length, b);
-    for (int i = 0; i < length; i++)
     {
-        printf("%d ", b[i]);
+        Solution s;
+        vector<int> data = {1, 2, 3, 4, 5};
+        auto res = s.constructArr(data);
+        for (auto x : res)
+        {
+            cout << x << endl;
+        }
     }
-    printf("\n");
 }

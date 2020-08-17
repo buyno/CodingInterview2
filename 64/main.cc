@@ -1,8 +1,10 @@
 // 求1+2+...+n,不能使用乘除，for,while,if,else,switch,case,A?B:C
 
-// 1）构造函数，n个对象，静态成员
+// 1）*构造函数，n个对象，静态成员
 // 2）虚函数,!!n来分流，
 // 3）函数指针，!!n用于分路
+// 4) *n && (n = n+sumNums(n-1));
+// 5) *递归 !!n来分流
 #include <stdio.h>
 
 class Test

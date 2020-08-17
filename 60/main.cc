@@ -1,59 +1,73 @@
 // n个骰子的点数。点数之和为s，输出s的所有可能值的概率
+// 递归时间效率不够，，只能用动态规划
 #include <stdio.h>
 #include <map>
 #include <math.h>
+#include <vector>
+#include <iostream>
+using namespace std;
 
-//递归
-// (第n个骰子，总骰子数，面数，当前和，保存结果)
-void func_1(int n, int number, int faces, int sum, int *res)
+class Solution
 {
-    if (n <= 0)
+public:
+    vector<double> twoSum(int n)
     {
-        res[0] = -1;
-        return;
+        // result[i][j]表示投第i+1个骰子之后，总和为j的次数
+        vector<vector<double>> result(n, vector<double>(6 * n + 1, 0));
+        int count = 0;
+        for (int i = 1; i <= 6; i++)
+        {
+            result[0][i] = 1;
+        }
+        for (int i = 1; i < n; i++)
+        {
+            //第i+1个骰子，取值范围是i+1~6(i+1)
+            for (int j = i + 1; j <= 6 * (i + 1); j++)
+            {
+                // if (j - 1 >= i)
+                //     result[i][j] = result[i][j] + result[i - 1][j - 1];
+                // if (j - 2 >= i)
+                //     result[i][j] = result[i][j] + result[i - 1][j - 2];
+                // if (j - 3 >= i)
+                //     result[i][j] = result[i][j] + result[i - 1][j - 3];
+                // if (j - 4 >= i)
+                //     result[i][j] = result[i][j] + result[i - 1][j - 4];
+                // if (j - 5 >= i)
+                //     result[i][j] = result[i][j] + result[i - 1][j - 5];
+                // if (j - 6 >= i)
+                //     result[i][j] = result[i][j] + result[i - 1][j - 6];
+                for (int k = 1; k <= 6; k++)
+                {
+                    // result[i][j]表示投第i+1个骰子之后，总和为j的次数
+                    if (j - k >= i)
+                        result[i][j] = result[i][j] + result[i - 1][j - k];
+                }
+            }
+        }
+        int sum = pow(6, n);
+        for (int i = n; i <= 6 * n; i++)
+        {
+            result[n - 1][i] = result[n - 1][i] / sum;
+        }
+        return vector<double>(result[n - 1].begin() + n, result[n - 1].begin() + 6 * n + 1);
     }
-    else if (n == 1)
-    {
-        res[sum - number]++;
-        return;
-    }
-    for (int i = 1; i <= faces; i++)
-    {
-        func_1(n - 1, number, faces, sum + i, res);
-    }
-}
-// 循环解法
-// void func_2(int n, int number, int faces, int sum, int *res)
-// {
-// }
-// void f(int number, int faces)
-// {
-//     int *res = new int[number * faces - number + 1];
-//     f(number, number, faces, res);
-// }
-void test(int number, int faces)
-{
-    int res[faces * number - number + 1];
-    for (int i = 0; i < faces * number - number + 1; i++)
-    {
-        res[i] = 0;
-    }
-    for (int i = 1; i <= faces; i++)
-    {
-        func_1(number, number, faces, i, res);
-    }
-
-    for (int i = 0; i < faces * number - number + 1; i++)
-    {
-        printf("%d %d %f\n", i + number, res[i], res[i] / pow(faces, number));
-    }
-}
+};
 int main()
 {
-    test(1, 6);
-    test(2, 6);
-    test(3, 6);
-    // test(4, 6);
-    // test(11, 6);
-    test(0, 6);
+    {
+        Solution s;
+        auto res = s.twoSum(1);
+        for (auto x : res)
+        {
+            // cout << x << endl;
+        }
+    }
+    {
+        Solution s;
+        auto res = s.twoSum(2);
+        for (auto x : res)
+        {
+            cout << x << endl;
+        }
+    }
 }

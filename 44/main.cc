@@ -3,67 +3,47 @@
 #include <assert.h>
 #include <stdio.h>
 #include <cmath>
+#include <string>
+using namespace std;
 
-int getNum(int k)
+class Solution
 {
-    if (k < 10)
+public:
+    int findNthDigit(int n)
     {
-        return k;
-    }
-    int need = k - 10; //记录还需要的位数
-    // 10,90*2,900*3,9000*4
-    int mark = 10; // 循环终止的条件
-    int i = 1;     // 记录当前数字的位数，实际为i+1位，比如2位数/3位数
-    while (mark < k)
-    {
-        int count = 9 * pow(10, i) * (i + 1); //两位数有90*2位，三位数有900*3位
-        // 如果需要的位已经被满足，终止循环
-        if (need < count)
+        if (n <= 9)
         {
-            break;
+            return n;
         }
-        need = need - count;
-        mark += count;
-        i++;
+        int i;
+        int base = 10;
+        n = n - 10;
+        for (i = 1; i < 10; i++)
+        {
+            if (n > (i + 1) * 9 * pow(10, i))
+            {
+                n = n - (i + 1) * 9 * pow(10, i);
+                base = base * 10;
+            }
+            else
+            {
+                break;
+            }
+        }
+        return to_string(base + n / (i + 1))[n % (i + 1)] - '0';
     }
-    //循环结束的时候，need表示在当前(i+1)位数的序列中需要进need位
-    //i+1位数的第need个
-    int res = pow(10, i) + need / (i + 1);
-    int index = i + 1 - need % (i + 1) - 1; //低位到高位的第index个
-    for (int i = 0; i < index; i++)
-    {
-        res = res / 10;
-    }
-    return res % 10;
-}
+};
+
 int main()
 {
-    int k;
-
-    k = 0;
-    assert(getNum(k) == 0);
-    k = 1;
-    assert(getNum(k) == 1);
-    k = 9;
-    assert(getNum(k) == 9);
-    k = 10; //1
-    assert(getNum(k) == 1);
-    k = 11; //0
-    assert(getNum(k) == 0);
-    k = 12; //1
-    assert(getNum(k) == 1);
-    k = 13; //1
-    assert(getNum(k) == 1);
-    k = 19;
-    assert(getNum(k) == 4);
-    k = 189;
-    assert(getNum(k) == 9);
-    k = 190;
-    assert(getNum(k) == 1);
-    k = 1000;
-    assert(getNum(k) == 3);
-    k = 1001;
-    assert(getNum(k) == 7);
-    k = 1002;
-    assert(getNum(k) == 0);
+    Solution s;
+    assert(s.findNthDigit(3) == 3);
+    assert(s.findNthDigit(11) == 0);
+    assert(s.findNthDigit(50) == 3);
+    assert(s.findNthDigit(150) == 8);
+    assert(s.findNthDigit(200) == 0);
+    assert(s.findNthDigit(500) == 0);
+    assert(s.findNthDigit(900) == 6);
+    assert(s.findNthDigit(2000) == 0);
+    assert(s.findNthDigit(2700) == 6);
 }

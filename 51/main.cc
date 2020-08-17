@@ -3,146 +3,92 @@
 // 递归的思想：左半边与右半边比较，存在逆序对就+1，但是要先在内部的左半与右半比较，内部比较完之后会归并排序
 
 //data里从start到end的数字，先找逆序对数，再归并排序到tmp中,再将tmp中的值复制会data中
-#include <stdio.h>
+
 #include <assert.h>
+#include <iostream>
+#include <vector>
+using namespace std;
 
-int getReversePair(int *data, int *tmp, int start, int end)
+class Solution
 {
-    if (start >= end)
+public:
+    int reversePairs(vector<int> &nums)
     {
-        return 0;
-    }
-    int count = 0;
-    count += getReversePair(data, tmp, start, start + (end - start) / 2);
-    count += getReversePair(data, tmp, start + (end - start) / 2 + 1, end);
-    int p1 = start + (end - start) / 2;
-    int p2 = end;
-    while (p1 >= start)
-    {
-        p2 = end;
-        while (p2 >= start + (end - start) / 2 + 1)
+        if (nums.size() == 0)
         {
-            if (data[p1] > data[p2]) //相等不算逆序
+            return 0;
+        }
+        vector<int> temp(nums.begin(), nums.end());
+        return reversePairs(nums, 0, nums.size() - 1, temp);
+    }
+    int reversePairs(vector<int> &nums, int left, int right, vector<int> &temp)
+    {
+        if (left == right)
+        {
+            return 0;
+        }
+        int mid = (left + right) / 2;
+        int count = 0;
+        count += reversePairs(nums, left, mid, temp);
+        count += reversePairs(nums, mid + 1, right, temp);
+        //遍历，目的是找到左右两边的逆序对数，和将左右两边归并排序到temp中
+        int leftindex = left;
+        int rightindex = mid + 1;
+        int index = left;
+        while (leftindex <= mid && rightindex <= right)
+        {
+            if (nums[leftindex] <= nums[rightindex])
             {
-                count += (p2 - (start + (end - start) / 2 + 1) + 1);
-                break;
+                temp[index] = nums[leftindex];
+                index++;
+                leftindex++;
             }
-            p2--;
+            else
+            {
+                count += mid - leftindex + 1;
+                temp[index] = nums[rightindex];
+                index++;
+                rightindex++;
+            }
         }
-        p1--;
-    }
-    //归并
-    p1 = start + (end - start) / 2;
-    p2 = end;
-    int index = end;
-    while (p1 >= start && p2 >= start + (end - start) / 2 + 1)
-    {
-        if (data[p1] >= data[p2])
+        while (leftindex <= mid)
         {
-            tmp[index--] = data[p1--];
+            temp[index++] = nums[leftindex++];
         }
-        else
+        while (rightindex <= right)
         {
-            tmp[index--] = data[p2--];
+            temp[index++] = nums[rightindex++];
         }
+        //从temp中拷贝回nums
+        for (int i = left; i <= right; i++)
+        {
+            nums[i] = temp[i];
+        }
+        return count;
     }
-    while (p1 >= start)
-    {
-        tmp[index--] = data[p1--];
-    }
-    while (p2 >= start + (end - start) / 2 + 1)
-    {
-        tmp[index--] = data[p2--];
-    }
-    index = start;
-    while (index <= end)
-    {
-        data[index] = tmp[index];
-        index++;
-    }
-    return count;
-}
+};
 
-int getReversePair(int *data, int length)
-{
-    if (data == nullptr || length <= 0)
-    {
-        return -1;
-    }
-    int *tmp = new int[length];
-    int count = getReversePair(data, tmp, 0, length - 1);
-    delete[] tmp;
-    return count;
-}
-
-void test1()
-{
-    int *data = nullptr;
-    int length = 2;
-    int res = getReversePair(data, length);
-    assert(res == -1);
-    data = new int[2];
-    length = 0;
-    res = getReversePair(data, length);
-    assert(res == -1);
-    delete[] data;
-}
-
-void test2()
-{
-    int data[] = {1, 2, 3, 4, 7, 6, 5};
-    int length = sizeof(data) / sizeof(data[0]);
-
-    int res = getReversePair(data, length);
-    assert(res == 3);
-}
-void test3()
-{
-    int data[] = {4, 5, 6, 7};
-    int length = sizeof(data) / sizeof(data[0]);
-
-    int res = getReversePair(data, length);
-    assert(res == 0);
-}
-void test4()
-{
-    int data[] = {1, 2, 1, 2, 1};
-    int length = sizeof(data) / sizeof(data[0]);
-
-    int res = getReversePair(data, length);
-    assert(res == 3);
-}
-void test5()
-{
-    int data[] = {1, 2, 1, 2, 1};
-    int length = sizeof(data) / sizeof(data[0]);
-
-    int res = getReversePair(data, length);
-    assert(res == 3);
-}
-void test6()
-{
-    int data[] = {3};
-    int length = sizeof(data) / sizeof(data[0]);
-
-    int res = getReversePair(data, length);
-    assert(res == 0);
-}
-void test7()
-{
-    int data[] = {7, 3};
-    int length = sizeof(data) / sizeof(data[0]);
-
-    int res = getReversePair(data, length);
-    assert(res == 1);
-}
 int main()
 {
-    test1();
-    test2();
-    test3();
-    test4();
-    test5();
-    test6();
-    test7();
+    {
+        Solution s;
+        vector<int> data = {1, 3, 2, 3, 1};
+        int res = s.reversePairs(data);
+        cout << res << endl;
+        assert(res == 4);
+    }
+    {
+        Solution s;
+        vector<int> data = {7, 5, 6, 4};
+        int res = s.reversePairs(data);
+        cout << res << endl;
+        assert(res == 5);
+    }
+    {
+        Solution s;
+        vector<int> data = {4, 5, 6, 7};
+        int res = s.reversePairs(data);
+        cout << res << endl;
+        assert(res == 0);
+    }
 }
