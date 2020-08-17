@@ -1,122 +1,7 @@
 // 二叉搜索树的第K大节点
-
+// 一个长度为n-1的递增排序数组中的所有数字都是唯一的，并且每个数字都在范围0～n-1之内。在范围0～n-1内的n个数字中有且只有一个数字不在该数组中，请找出这个数字。
+// ：中序遍历+提前返回
 #include <assert.h>
-#include <stdio.h>
-
-// struct TreeNode
-// {
-//     TreeNode() : value(0) {}
-//     TreeNode(int val) : value(val) {}
-//     int value;
-//     TreeNode *left;
-//     TreeNode *right;
-// };
-// TreeNode *getFirstKValue(TreeNode *root, int K, int *pcount)
-// {
-//     if (root == nullptr)
-//     {
-
-//         return nullptr;
-//     }
-//     else
-//     {
-//         if (TreeNode *res = getFirstKValue(root->left, K, pcount))
-//         {
-//             return res;
-//         }
-//         // printf("%d ", root->value);
-//         // *pcount++;
-//         if (++(*pcount) == K)
-//         {
-//             return root;
-//         }
-//         if (TreeNode *res = getFirstKValue(root->right, K, pcount))
-//         {
-//             return res;
-//         }
-//         return nullptr;
-//     }
-// }
-// int getFirstKValue(TreeNode *root, int k)
-// {
-//     if (root == nullptr)
-//     {
-//         return -1; //log
-//     }
-//     int count = 0;
-//     TreeNode *res;
-//     res = getFirstKValue(root, k, &count);
-//     if (res == nullptr)
-//     {
-//         printf("not found\n");
-//         return -1;
-//     }
-
-//     return res->value;
-// }
-// void test1()
-// {
-//     TreeNode *root = new TreeNode(5);
-//     root->left = new TreeNode(3);
-//     root->right = new TreeNode(7);
-//     root->left->left = new TreeNode(2);
-//     root->left->right = new TreeNode(4);
-//     root->right->left = new TreeNode(6);
-//     root->right->right = new TreeNode(8);
-//     int res;
-//     assert(getFirstKValue(nullptr, 3) == -1);
-//     assert(getFirstKValue(root, 100) == -1);
-//     assert(getFirstKValue(root, -1) == -1);
-//     assert(getFirstKValue(root, 0) == -1);
-//     assert(getFirstKValue(root, 8) == -1);
-
-//     res = getFirstKValue(root, 3);
-//     assert(res == 4);
-//     res = getFirstKValue(root, 1);
-//     assert(res == 2);
-//     res = getFirstKValue(root, 2);
-//     assert(res == 3);
-//     res = getFirstKValue(root, 7);
-//     assert(res == 8);
-// }
-// void test2()
-// {
-//     TreeNode *root = new TreeNode(5);
-//     root->left = new TreeNode(3);
-//     root->left->left = new TreeNode(2);
-//     int res;
-
-//     res = getFirstKValue(root, 1);
-//     assert(res == 2);
-//     res = getFirstKValue(root, 2);
-//     assert(res == 3);
-//     res = getFirstKValue(root, 3);
-//     assert(res == 5);
-//     res = getFirstKValue(root, 7);
-//     assert(res == -1);
-// }
-// void test3()
-// {
-//     TreeNode *root = new TreeNode(5);
-//     root->right = new TreeNode(7);
-//     root->right->right = new TreeNode(8);
-//     int res;
-
-//     res = getFirstKValue(root, 1);
-//     assert(res == 5);
-//     res = getFirstKValue(root, 2);
-//     assert(res == 7);
-//     res = getFirstKValue(root, 3);
-//     assert(res == 8);
-//     res = getFirstKValue(root, 7);
-//     assert(res == -1);
-// }
-// int main()
-// {
-//     test1();
-//     test2();
-//     test3();
-// }
 #include <iostream>
 using namespace std;
 struct TreeNode
@@ -136,6 +21,7 @@ public:
         return func(root, k);
         // return -1;
     }
+    // 因为数的范围是0~n-1，所以返回值为>=0时表示
     int func(TreeNode *root, int &k)
     {
         if (!root)

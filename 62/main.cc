@@ -1,9 +1,13 @@
-//0-n-1，n个数字围城一圈，从0开始，每m个数就去掉一个，问最后剩下的数字是？
+// 约瑟夫环问题
+// 0-n-1，n个数字围城一圈，从0开始，每m个数就去掉一个，问最后剩下的数字是？
 // 比如n=5，m = 3，那么删掉的序列是2，0，4，1，返回3
 
 // 1）int数组保存结果
 // 2）list链表
 // 3）数学方法
+//    https://blog.csdn.net/u011500062/article/details/72855826
+//    res = (res+m)%i
+
 #include <stdio.h>
 #include <assert.h>
 // // 每个数要m次，O(mn)
@@ -70,29 +74,42 @@ class Solution
 public:
     int lastRemaining(int n, int m)
     {
-        list<int> data;
+        int res = 0;
+        for (int i = 1; i <= n; i++)
+        {
+            res = (res + m) % i;
         }
+        return res;
+    }
 };
+
 int main()
 {
-    Solution s;
-    int res = s.lastRemaining(5, 3);
-    cout << res << endl;
-    res = s.lastRemaining(10, 17);
-    cout << res << endl;
+    {
+        Solution s;
+        int res = s.lastRemaining(5, 3);
+        cout << res << endl;
+        assert(res == 3);
+        res = s.lastRemaining(10, 17);
+        cout << res << endl;
+        assert(res == 2);
+    }
     {
         Solution s;
         int res = s.lastRemaining(1, 1);
         cout << res << endl;
+        assert(res == 0);
     }
     {
         Solution s;
         int res = s.lastRemaining(1, 3);
         cout << res << endl;
+        assert(res == 0);
     }
     {
         Solution s;
         int res = s.lastRemaining(3, 1);
         cout << res << endl;
+        assert(res == 2);
     }
 }

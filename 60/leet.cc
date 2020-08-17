@@ -7,6 +7,8 @@
 #include <queue>
 #include <math.h>
 //循环解法
+// 这种方法只使用了2n的空间
+// 时间复杂度O(n*n)，空间复杂度O(n)
 using namespace std;
 
 class Solution

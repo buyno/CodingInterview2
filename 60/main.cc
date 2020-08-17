@@ -1,5 +1,9 @@
 // n个骰子的点数。点数之和为s，输出s的所有可能值的概率
 // 递归时间效率不够，，只能用动态规划
+
+// 第i+1个骰子，取值范围是i+1~6(i+1)
+// result[i][j]表示投第i+1个骰子之后，总和为j的次数
+// 时间复杂度O(n*n)，空间复杂度O(N*n)
 #include <stdio.h>
 #include <map>
 #include <math.h>
@@ -24,18 +28,6 @@ public:
             //第i+1个骰子，取值范围是i+1~6(i+1)
             for (int j = i + 1; j <= 6 * (i + 1); j++)
             {
-                // if (j - 1 >= i)
-                //     result[i][j] = result[i][j] + result[i - 1][j - 1];
-                // if (j - 2 >= i)
-                //     result[i][j] = result[i][j] + result[i - 1][j - 2];
-                // if (j - 3 >= i)
-                //     result[i][j] = result[i][j] + result[i - 1][j - 3];
-                // if (j - 4 >= i)
-                //     result[i][j] = result[i][j] + result[i - 1][j - 4];
-                // if (j - 5 >= i)
-                //     result[i][j] = result[i][j] + result[i - 1][j - 5];
-                // if (j - 6 >= i)
-                //     result[i][j] = result[i][j] + result[i - 1][j - 6];
                 for (int k = 1; k <= 6; k++)
                 {
                     // result[i][j]表示投第i+1个骰子之后，总和为j的次数
@@ -59,12 +51,20 @@ int main()
         auto res = s.twoSum(1);
         for (auto x : res)
         {
-            // cout << x << endl;
+            cout << x << endl;
         }
     }
     {
         Solution s;
         auto res = s.twoSum(2);
+        for (auto x : res)
+        {
+            cout << x << endl;
+        }
+    }
+    {
+        Solution s;
+        auto res = s.twoSum(5);
         for (auto x : res)
         {
             cout << x << endl;

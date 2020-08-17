@@ -5,6 +5,7 @@
 // 1,2,3,4,5,6,8,9,10,12,15,16,18,20
 // 方法一：除2/3/5，看最后剩下的是否为1
 // 方法二：循环，下一个数一定是前面的已知丑数分别*2,*3,*5的最小值
+//       （一个丑数的*2 *3 *5肯定也是一个丑数）
 // https://leetcode-cn.com/problems/chou-shu-lcof/solution/chou-shu-ii-qing-xi-de-tui-dao-si-lu-by-mrsate/
 
 #include <assert.h>
@@ -25,6 +26,7 @@ public:
         while (index < n)
         {
             data[index] = min(data[p2] * 2, min(data[p3] * 3, data[p5] * 5));
+            // 一个数*2和另一个数*3可能相等，所以下面三个判断不是互斥的
             if (data[index] == data[p2] * 2)
                 p2++;
             if (data[index] == data[p3] * 3)

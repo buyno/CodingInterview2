@@ -1,119 +1,113 @@
 // 扑克牌中的顺子：随机抽五张牌，判断是不是顺子，A,2-10,J,Q,K,大王小王看作任意数字
 
-#include <stdio.h>
+// 1）排序之后查找空缺和大小王的数量
+// 2）不排序
+// 如果我们能够知道 5 张扑克牌中的最大值 maxValuemaxValuemaxValue 和最小值 minValueminValueminValue ，那我们就知道，要使它为顺子需要 maxValue−minValue+1maxValue - minValue + 1maxValue−minValue+1 张牌。
+
+//     在查找 maxValuemaxValuemaxValue 和 minValueminValueminValue 过程中，跳过大小王 000 。
+//     如果 maxValue−minValue+1>5maxValue - minValue + 1 > 5maxValue−minValue+1>5，说明题目给的 5 张牌不足以构成顺子，返回 falsefalsefalse .
+//         即使里面有大小王，也不够用来填补使它构成顺子。
+//     如果 maxValue−minValue+1<=5maxValue - minValue + 1 <= 5maxValue−minValue+1<=5，说明 5 张牌足以构成顺子，返回 truetruetrue。
+//         里面的大小王填补在合适位置即可。
+
+// 同时，我们再定义一个标志数组判断是否有重复数字，发现重复数字直接返回 falsefalsefalse 即可。
+#include <vector>
+#include <iostream>
 #include <assert.h>
+#include <algorithm>
+using namespace std;
 
-int continuous(int *data, int length)
+// class Solution
+// {
+// public:
+//     bool isStraight(vector<int> &nums)
+//     {
+//         sort(nums.begin(), nums.end());
+//         int zerocount = 0;
+//         int blanks = 0;
+//         for (int i = 0; i < nums.size() - 1; i++)
+//         {
+//             if (nums[i] == 0)
+//             {
+//                 zerocount++;
+//             }
+//             else
+//             {
+//                 if (nums[i] == nums[i + 1])
+//                 {
+//                     return false;
+//                 }
+//                 if (nums[i] != nums[i + 1] + 1)
+//                 {
+//                     blanks += nums[i + 1] - nums[i] - 1;
+//                 }
+//             }
+//         }
+//         if (zerocount >= blanks)
+//         {
+//             return true;
+//         }
+//         else
+//         {
+//             return false;
+//         }
+//     }
+// };
+
+class Solution
 {
-    if (data == nullptr || length != 5)
+public:
+    bool isStraight(vector<int> &nums)
     {
-        return 0;
-    }
-    //排序,O(n*n)。可以改用sort或者qsort
-
-    for (int i = 0; i < length - 1; i++)
-    {
-        int minindex = i;
-        for (int j = i + 1; j < length; j++)
+        int temp[15] = {0};
+        int minvalue = 14;
+        int maxvalue = 0;
+        for (auto x : nums)
         {
-            if (data[minindex] > data[j])
+            if (x == 0)
             {
-                minindex = j;
+                continue;
             }
+            if (temp[x])
+            {
+                return false;
+            }
+            temp[x] = 1;
+            minvalue = min(x, minvalue);
+            maxvalue = max(x, maxvalue);
         }
-        int tmp = data[minindex];
-        data[minindex] = data[i];
-        data[i] = tmp;
+        return maxvalue - minvalue + 1 <= 5;
     }
-    //对子
-    for (int i = 0; i < length - 1; i++)
-    {
-        if (data[i] != 0 && data[i] == data[i + 1])
-        {
-            return 0;
-        }
-    }
-    //统计大小王个数
-    //统计空位数
-    int king = 0;
-    int blank = 0;
-    for (int i = 0; i < length; i++)
-    {
-        if (data[i] == 0)
-        {
-            king++;
-        }
-        else
-        {
-            break;
-        }
-    }
-    int startindex = king;
-    //计算空位也可以遍历时，计算相邻两个数的差值，加和差值，就是空位数
-    blank = data[length - 1] - data[startindex] - (length - 1 - startindex);
+};
 
-    if (king >= blank)
-    {
-        // printf("shun xu\n");
-        return 1;
-    }
-    else
-    {
-        // printf("bu shun xu\n");
-        return 0;
-    }
-}
-void test1()
-{
-    int data[] = {2, 3, 7, 0, 4};
-    int length = sizeof(data) / sizeof(data[0]);
-    assert(continuous(nullptr, length) == 0);
-    assert(continuous(data, 0) == 0);
-    assert(continuous(data, -1) == 0);
-}
-void test2()
-{
-    int data[] = {2, 3, 6, 5, 4};
-    int length = sizeof(data) / sizeof(data[0]);
-    assert(continuous(data, length) == 1);
-}
-void test3()
-{
-    int data[] = {2, 3, 7, 5, 4};
-    int length = sizeof(data) / sizeof(data[0]);
-    assert(continuous(data, length) == 0);
-}
-void test4()
-{
-    int data[] = {2, 0, 6, 5, 0};
-    int length = sizeof(data) / sizeof(data[0]);
-    assert(continuous(data, length) == 1);
-}
-void test5()
-{
-    int data[] = {2, 3, 0, 5, 0};
-    int length = sizeof(data) / sizeof(data[0]);
-    assert(continuous(data, length) == 1);
-}
-void test6()
-{
-    int data[] = {6, 3, 0, 5, 0};
-    int length = sizeof(data) / sizeof(data[0]);
-    assert(continuous(data, length) == 1);
-}
-void test7()
-{
-    int data[] = {2, 5, 0, 5, 0};
-    int length = sizeof(data) / sizeof(data[0]);
-    assert(continuous(data, length) == 0);
-}
 int main()
 {
-    test1();
-    test2();
-    test3();
-    test4();
-    test5();
-    test6();
-    test7();
+    {
+        Solution s;
+        vector<int> data = {1, 2, 3, 4, 5};
+        bool res = s.isStraight(data);
+        cout << res << endl;
+        assert(res == true);
+    }
+    {
+        Solution s;
+        vector<int> data = {1, 2, 3, 4, 6};
+        bool res = s.isStraight(data);
+        cout << res << endl;
+        assert(res == false);
+    }
+    {
+        Solution s;
+        vector<int> data = {1, 2, 3, 4, 3};
+        bool res = s.isStraight(data);
+        cout << res << endl;
+        assert(res == false);
+    }
+    {
+        Solution s;
+        vector<int> data = {1, 2, 3, 5, 0};
+        bool res = s.isStraight(data);
+        cout << res << endl;
+        assert(res == true);
+    }
 }
